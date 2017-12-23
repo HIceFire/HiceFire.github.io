@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="React生命周期笔记"/>
+
+
+
+
+  <meta name="keywords" content="React, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/1006.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> React生命周期笔记 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          React生命周期笔记
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-10-06
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/1006.html"
+             data-title="React生命周期笔记">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#组件初始化"><span class="toc-text">组件初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillMount"><span class="toc-text">componentWillMount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentDidMount"><span class="toc-text">componentDidMount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#组件更新"><span class="toc-text">组件更新</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillReceiveProps"><span class="toc-text">componentWillReceiveProps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shouldComponentUpdate"><span class="toc-text">shouldComponentUpdate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUpdate-和-componentDidUpdate"><span class="toc-text">componentWillUpdate 和 componentDidUpdate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#组件卸载"><span class="toc-text">组件卸载</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#componentWillUnmount"><span class="toc-text">componentWillUnmount</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#生命周期图"><span class="toc-text">生命周期图</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>React是一个相当“纯净”框架，专注于view层的渲染，<code>UI=F(state)</code>这一公式很好了刻画了React的作用。<br>本矿工使用React技术栈也有一段时间了（忙到吐血），是时候做一些知识点的总结了。这篇文章将会结合<a href="https://reactjs.org/docs/react-component.html#the-component-lifecycle" target="_blank" rel="external">官方文档</a>，简述React的各个生命周期函数。毕竟，好记性不如烂笔头。<br><a id="more"></a></p>
+<h1 id="组件初始化"><a href="#组件初始化" class="headerlink" title="组件初始化"></a>组件初始化</h1><h2 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a><strong>constructor</strong></h2><p><code>constructor</code>函数本身并不属于React的生命周期，它相当于ES5时代大写字母开头的构造函数。<br>一般我们会在<code>constructor</code>函数总做三件事：</p>
+<ul>
+<li><code>super(props)</code>相当于<code>getDefaultProps</code></li>
+<li><code>this.state = {...}</code>相当于<code>getInitialState</code></li>
+<li><code>this.xxx.bind(this)</code></li>
+</ul>
+<p>当然，你可以不定义<code>constructor</code>函数，React默认会执行<code>super(props)</code>。但是一旦定义了，就必须手动调用，否则会得到<code>this.props === undefined</code>。初始化<code>state</code>和绑定<code>this</code>也没有强制必须在<code>constructor</code>中，但这是一种比较好的选择。</p>
+<h2 id="componentWillMount"><a href="#componentWillMount" class="headerlink" title="componentWillMount"></a><strong>componentWillMount</strong></h2><p>  <code>componentWillMount</code>会在渲染之前触发，在此期间允许使用<code>setState</code>，并且不会造成额外的开销，但这并不是一种好的选择。值得一提的是，这是唯一一个在服务端实例化可以被调用的生命周期函数。官网原文：</p>
+<blockquote>
+<p>This is the only lifecycle hook called on server rendering.</p>
+</blockquote>
+<h2 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a><strong>componentDidMount</strong></h2><p>  <code>componentDidMount</code>会在渲染完成之后触发。我们可以在该函数中使用<code>refs</code>及<code>findDOMNode</code>等和<code>DOM</code>相关的操作。其实这应该是前端同学最好理解的一点。毕竟，当年我们的启蒙老师（前端哪儿来的启蒙老师？）都告诉过我们“script标签引入js要放在body标签的后面~”</p>
+<h1 id="组件更新"><a href="#组件更新" class="headerlink" title="组件更新"></a>组件更新</h1><h2 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a><strong>componentWillReceiveProps</strong></h2><p>  <code>componentWillReceiveProps</code>仅仅存在于组件更新的生命周期中，当接收到新的<code>props</code>时触发，函数的第一个参数为新的<code>props</code>。除此之外，无论组件初始化还是<code>setState</code>都不会引起<code>componentWillReceiveProps</code>的触发。与众不同的是，在<code>componentWillReceiveProps</code>中<strong>可以使用<code>setState</code>改变组件的状态。</strong></p>
+<h2 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a><strong>shouldComponentUpdate</strong></h2><p>  <code>shouldComponentUpdate</code>也是仅存在于组件更新的生命周期中，当<code>props</code>发生改变或者调用<code>setState</code>更新<code>state</code>状态时，都会引起<code>shouldComponentUpdate</code>的触发。函数的前两个参数分别即将用于渲染的<code>nextProps</code>和<code>nextState</code>。如果<code>shouldComponentUpdate</code>函数的返回值为<code>false</code>，组件的生命周期将不再继续执行。</p>
+<h2 id="componentWillUpdate-和-componentDidUpdate"><a href="#componentWillUpdate-和-componentDidUpdate" class="headerlink" title="componentWillUpdate 和 componentDidUpdate"></a><strong>componentWillUpdate 和 componentDidUpdate</strong></h2><p>  值得讨论的地方不多，和<code>componentWillMount</code>和<code>componentDidMount</code>类似，都是紧邻<code>render</code>前后的生命周期函数。</p>
+<h1 id="组件卸载"><a href="#组件卸载" class="headerlink" title="组件卸载"></a>组件卸载</h1><h2 id="componentWillUnmount"><a href="#componentWillUnmount" class="headerlink" title="componentWillUnmount"></a><strong>componentWillUnmount</strong></h2><p>  组件销毁前最后一个生命周期函数，需要将非必要的cases都卸载干净，如手动挂载的事件，定时器等。</p>
+<h1 id="生命周期图"><a href="#生命周期图" class="headerlink" title="生命周期图"></a>生命周期图</h1><p><img src="https://cdn-images-1.medium.com/max/1600/0*VoYsN6eq7I_wjVV5.png" alt="React生命周期示例图"><br><br><br>图片出处：<a href="https://tylermcginnis.com/an-introduction-to-life-cycle-events-in-react-js/" target="_blank" rel="external">https://tylermcginnis.com/an-introduction-to-life-cycle-events-in-react-js/</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/React/">React</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/1111.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">React模态框设计思想</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/article/2017/0826.html">
+        <span class="next-text nav-default">基于Nodejs爬虫简单对比Callback、Promise与Async</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>

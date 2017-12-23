@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="HTML5 FileReader API 与 Ajax上传文件"/>
+
+
+
+
+  <meta name="keywords" content="WEB相关, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/0216.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> HTML5 FileReader API 与 Ajax上传文件 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          HTML5 FileReader API 与 Ajax上传文件
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-02-16
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/0216.html"
+             data-title="HTML5 FileReader API 与 Ajax上传文件">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#文件读取"><span class="toc-text">文件读取</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构造FormData及Ajax上传文件"><span class="toc-text">构造FormData及Ajax上传文件</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>在日常工作中，引用第三方工具是很常见的事。但是如果为了满足某一个需求，而引用一个巨大的工具，而实际情况却是仅仅使用到这个工具所有功能的冰上一角，这是相当没有规划，没有追求的行为。为了告别<a href="http://fex.baidu.com/webuploader/" target="_blank">Web Uploader</a>（当然这是一个很出色的工具），我用这篇文章理一理文件读取与上传的相关知识。</p>
+<a id="more"></a>
+<h1 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h1><p>首先我们需要一个上传的控件。<br><br>如果你嫌弃原生的上传控件颜值不优雅，可以自行用模拟一个，监听点击事件并触发一只隐藏的input[file]。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- 如果需要一次性上传多个图片，可以加上multiple属性 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"fileUploadBtn"</span> <span class="attr">type</span>=<span class="string">"file"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>当有文件传入时，会触发<code>onchange</code>事件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fileUploadBtn.addEventListener(<span class="string">'change'</span>, callback)</div></pre></td></tr></table></figure></p>
+<p>此时我们可以拿到上传的file对象，包含了上传文件的相关信息(<a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank">详情点这儿</a>)。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> callback = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> file = <span class="keyword">this</span>.files[<span class="number">0</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>FileReader API 提供了四种读取文件方式，名字也取得相当语义化。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader()</div><div class="line"></div><div class="line">reader.readAsText(file, encoding)</div><div class="line">reader.readAsDataURL(file)</div><div class="line">reader.readAsBinaryString(file)</div><div class="line">reader.readAsArrayBuffer(file)</div></pre></td></tr></table></figure>
+<p><code>reader.readyState</code> 记录着reader的状态。</p>
+<ul>
+<li>0：new之后</li>
+<li>1：执行上述四个读取方法之一后</li>
+<li>2：读取完毕，触发onload事件</li>
+</ul>
+<p>reader读取文件是异步操作，主要的生命周期Event和常规异步（如Ajax）很相似。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 上传进度</span></div><div class="line">reader.onprogress = <span class="function"><span class="keyword">function</span> (<span class="params">ev</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (ev.lengthComputable) &#123;	<span class="comment">// 文件的长度是否可计算</span></div><div class="line">		ev.total 			     <span class="comment">// 文件总长</span></div><div class="line">		ev.loaded 		        <span class="comment">// 已加载</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 上传成功</span></div><div class="line">reader.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	reader.result  <span class="comment">// 文件信息</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// 上传失败</span></div><div class="line">reader.onerror = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	reader.error  <span class="comment">// 错误信息</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// 上传完成</span></div><div class="line">reader.loadend = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="comment">// 上传开始</span></div><div class="line">reader.loadstart = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</div></pre></td></tr></table></figure>
+<h1 id="构造FormData及Ajax上传文件"><a href="#构造FormData及Ajax上传文件" class="headerlink" title="构造FormData及Ajax上传文件"></a>构造FormData及Ajax上传文件</h1><p>在前后端分离与Ajax大行其道的今天，我们这一代人多少对 FormData 有些陌生。今天也算是涨见识了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> callback = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> file = <span class="keyword">this</span>.files[<span class="number">0</span>]</div><div class="line">	<span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest()</div><div class="line"></div><div class="line">	<span class="comment">// new一个FormData实例</span></div><div class="line">	<span class="keyword">var</span> formData = <span class="keyword">new</span> FormData()</div><div class="line"></div><div class="line">	<span class="comment">// 将file对象添加到FormData实例</span></div><div class="line">	formData.append(<span class="string">'file'</span>, file)</div><div class="line"></div><div class="line">	xhr.open(<span class="string">'POST'</span>, <span class="string">'url'</span>, <span class="literal">true</span>)</div><div class="line">	xhr.send(formData)</div><div class="line"></div><div class="line">	xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">		<span class="keyword">if</span> (xhr.readyState === <span class="number">4</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (xhr.status === <span class="number">200</span>) &#123;</div><div class="line">				<span class="comment">// doSomeThing(this)</span></div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// error(this)</span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/WEB相关/">WEB相关</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/0314.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">细节把握——关于JavaScript中的typeof、instanceof、===与==</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>

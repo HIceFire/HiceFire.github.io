@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="细节把握——关于JavaScript中的typeof、instanceof、===与=="/>
+
+
+
+
+  <meta name="keywords" content="ECMAScript, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/0314.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> 细节把握——关于JavaScript中的typeof、instanceof、===与== - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          细节把握——关于JavaScript中的typeof、instanceof、===与==
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-03-14
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/0314.html"
+             data-title="细节把握——关于JavaScript中的typeof、instanceof、===与==">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#typeof"><span class="toc-text">typeof</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#instanceof"><span class="toc-text">instanceof</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#与"><span class="toc-text">=== 与 ==</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>ECMAScript中的三个基本的操作符，许多细节虽然不算复杂，不好好整理一下也会感觉概念有一些不清晰。时常回顾，以免生疏。<br><a id="more"></a></p>
+<h1 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h1><p><code>typeof</code> 操作符的作用是返还当前参数的数据类型，记住以下这几个稍微特殊的情况，基本没有什么大问题。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> <span class="string">'a'</span>			<span class="comment">// string</span></div><div class="line"><span class="keyword">typeof</span> <span class="number">1</span> 			 <span class="comment">// number</span></div><div class="line"><span class="keyword">typeof</span> <span class="literal">NaN</span> 		   <span class="comment">// number</span></div><div class="line"><span class="keyword">typeof</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;  <span class="comment">// function</span></div><div class="line"><span class="keyword">typeof</span> <span class="literal">undefined</span>      <span class="comment">// undefined</span></div><div class="line"><span class="keyword">typeof</span> <span class="built_in">Symbol</span>()       <span class="comment">// symbol ES6新加入的数据类型</span></div><div class="line"></div><div class="line"><span class="comment">// 除此之外，其他数据类型均返还object</span></div><div class="line"><span class="keyword">typeof</span> [<span class="number">1</span>]</div><div class="line"><span class="keyword">typeof</span> &#123; <span class="attr">a</span>: <span class="number">5</span> &#125;</div><div class="line"><span class="keyword">typeof</span> (<span class="keyword">new</span> <span class="built_in">Date</span>())</div><div class="line"><span class="keyword">typeof</span> <span class="literal">null</span></div></pre></td></tr></table></figure>
+<p>值得注意的是，<code>typeof null === Oeject</code> 是和我们正常的理解所违背的，据说这是当初开发ECMAScript的一个失误，饱受业界的诟病。但是我们作为ECMAScript的使用者，还是应该牢记这一特性。</p>
+<hr>
+<h1 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h1><p>讲道理，理解<code>instanceof</code>还是先从定义入手比较合适。</p>
+<blockquote>
+<p>The instanceof operator tests whether an object has in its <strong>prototype chain</strong> the <strong>prototype property of a constructor</strong>. 来源：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof" target="_blank" rel="external">MDN</a></p>
+</blockquote>
+<p>作为一名英语渣，我一般这么去理解：“后者的 <code>prototype</code> 是否处于前者的原型链(这里指隐式原型)上”。因此我们可以得出使用<code>instanceof</code>的一个前提条件——后者必须有<code>prototype</code>属性。<br>谁有<code>prototype</code>属性呢？<br>虽然只有构造函数的<code>prototype</code>才有意义，但是JavaScript语言本身并没有区别函数与构造函数的概念，所以严格意义上来说，<strong>有且仅有非原生函数与原生构造函数</strong>可以作为<code>instanceof</code>操作符的后者。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 非Object数据类型，皆为false</span></div><div class="line"><span class="number">1</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"><span class="string">'str'</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"><span class="literal">true</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"><span class="literal">NaN</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"><span class="literal">undefined</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 虽然typeof null === Oeject是事实标准，但很明显null instanceof Object === false才符合开发人员的逻辑预期</span></div><div class="line"><span class="literal">null</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"><span class="built_in">Object</span>.create(<span class="literal">null</span>) <span class="keyword">instanceof</span> <span class="built_in">Object</span></div><div class="line"></div><div class="line"><span class="comment">// 任意Object类型的数据类型 instanceof Object，皆为true（除了楼上两个null）</span></div><div class="line"><span class="built_in">Boolean</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span>     <span class="comment">// true</span></div><div class="line"><span class="built_in">Number</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span>      <span class="comment">// true</span></div><div class="line"><span class="built_in">String</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span>      <span class="comment">// true</span></div><div class="line"></div><div class="line"><span class="comment">// 实例与构造函数的情况</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> A()</div><div class="line">a <span class="keyword">instanceof</span> A    <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<hr>
+<h1 id="与"><a href="#与" class="headerlink" title="=== 与 =="></a>=== 与 ==</h1><p>  人们总是觉得<code>===</code>和<code>==</code>的区分很简单，恩，确实很简单。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span> == <span class="string">'1'</span>      <span class="comment">// true</span></div><div class="line"><span class="number">1</span> === <span class="string">'1'</span>     <span class="comment">// false</span></div><div class="line"><span class="comment">// 很简单对吧？恩，把下面的也记住了</span></div><div class="line"></div><div class="line"><span class="literal">true</span> == <span class="number">1</span>    </div><div class="line"><span class="literal">true</span> == <span class="string">'1'</span></div><div class="line"><span class="literal">false</span> == <span class="number">0</span></div><div class="line"><span class="literal">false</span> == <span class="string">'0'</span>    <span class="comment">// true</span></div><div class="line"></div><div class="line"><span class="comment">// 上述这四个家伙皆为true，除此之外，谁来都不好使</span></div><div class="line"></div><div class="line"><span class="literal">true</span> == <span class="string">'true'</span></div><div class="line"><span class="literal">false</span> == <span class="string">'false'</span></div><div class="line"><span class="literal">false</span> == <span class="literal">null</span></div><div class="line"><span class="literal">false</span> == <span class="literal">NaN</span></div><div class="line"><span class="literal">false</span> == <span class="literal">undefined</span>    <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<p>  另外，我们所讨论的<code>===</code>和<code>==</code>，有一个重要的前提是——<strong>基本数据类型</strong>。任何非基本数据类型作<code>===</code>和<code>==</code>运算，比较的都是内存地址。换言之，任何两个<strong>非同一引用</strong>的<strong>非基本数据类型</strong>相比较，皆为<code>false</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var a = &#123;&#125;</div><div class="line">var b = &#123;&#125;</div><div class="line"></div><div class="line">a === b   // false</div><div class="line">a == b    // false</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/ECMAScript/">ECMAScript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/0404.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">JavaScript常见排序算法整理</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/article/2017/0216.html">
+        <span class="next-text nav-default">HTML5 FileReader API 与 Ajax上传文件</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>

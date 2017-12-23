@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="关于“变量提升”中函数声明与函数表达式的区别"/>
+
+
+
+
+  <meta name="keywords" content="ECMAScript, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/0420.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> 关于“变量提升”中函数声明与函数表达式的区别 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          关于“变量提升”中函数声明与函数表达式的区别
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-04-20
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/0420.html"
+             data-title="关于“变量提升”中函数声明与函数表达式的区别">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关于JSer都很熟悉的简单例子"><span class="toc-text">关于JSer都很熟悉的简单例子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#今天令我栽跟头的题目"><span class="toc-text">今天令我栽跟头的题目</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>作为一名JSer，说到“变量提升”，我们都很熟悉。曾经我也以为是这样，直到今天去百度面试，在这个问题上狠狠的栽了个跟头。</p>
+<a id="more"></a>
+<h1 id="关于JSer都很熟悉的简单例子"><a href="#关于JSer都很熟悉的简单例子" class="headerlink" title="关于JSer都很熟悉的简单例子"></a>关于JSer都很熟悉的简单例子</h1><ul>
+<li>变量提升</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(foo)</div><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span> </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一个很简单的例子，大家应该很快能反应过来，输出的是<code>undefined</code>。</p>
+<ul>
+<li>函数提升</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">foo()</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是也一个很简单的例子，大家也应该很快能反应过来，<code>foo</code>函数是可以完美执行的。</p>
+<h1 id="今天令我栽跟头的题目"><a href="#今天令我栽跟头的题目" class="headerlink" title="今天令我栽跟头的题目"></a>今天令我栽跟头的题目</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ... 假装这里有很多不相关代码</span></div><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>)</div><div class="line">&#125;</div><div class="line">a()</div></pre></td></tr></table></figure>
+<p>输出啥？<br>如果对上面那两个例子非常熟悉，其实这一题应该是能给出答案的。<br>函数表达式的例子，我们可以改写为：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a  <span class="comment">// 声明变量的操作被提升到最前面</span></div><div class="line"><span class="comment">// ... 假装这里有很多不相关代码</span></div><div class="line">a = <span class="function"><span class="keyword">function</span> </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</div><div class="line">&#125;</div><div class="line">a()</div></pre></td></tr></table></figure></p>
+<p>如上，<code>a</code>变量的声明被提前到了作用域的最前面，执行到对应处，再给<code>a</code>赋值。<br>举一反三的话，函数声明的例子怎么改呢？<br>举一反三的话，就一定错了。因为举着一个西瓜，是反不出一个苹果的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// ... 假装这里有很多不相关代码</span></div><div class="line">foo()</div></pre></td></tr></table></figure></p>
+<p><strong>对于函数声明的提升，提升不仅仅是函数声明，而是这个函数的所有。</strong>我们总是把变量提升挂在嘴边，误以为变量声明提升（函数表达式本质也是一个变量声明）和函数声明提升是一回事，却忽视了重要的<strong>整体提升</strong>概念。<br>所以综合以上，可以把这道的面试题改下如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">// ... 假装这里有很多不相关代码</span></div><div class="line">a = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">a()</div></pre></td></tr></table></figure></p>
+<p>改写成这样的话，我想应该没有人会不知道输出什么吧？<br>很可惜，机会是留给有准备的人，我错过了一次好机会</p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/ECMAScript/">ECMAScript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/0512.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">三个小伙伴call，apply与bind的故事</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/article/2017/0409.html">
+        <span class="next-text nav-default">关于JavaScript中new、prototype与__proto__详解</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>

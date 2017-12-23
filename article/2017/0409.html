@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="关于JavaScript中new、prototype与__proto__详解"/>
+
+
+
+
+  <meta name="keywords" content="ECMAScript, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/0409.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> 关于JavaScript中new、prototype与__proto__详解 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          关于JavaScript中new、prototype与__proto__详解
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-04-09
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/0409.html"
+             data-title="关于JavaScript中new、prototype与__proto__详解">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#The-new-Operator"><span class="toc-text">The new Operator</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#prototype"><span class="toc-text">prototype</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#proto"><span class="toc-text">[[proto]]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>昨天看了大牛的这篇关于<a href="http://www.jianshu.com/p/6958f99db769" target="_blank">模拟bind函数实现</a>的文章，深受启发。其中有一处涉及到关于bind方法返回的函数作为构造函数的问题令我百思不得其解。于是决定补补基础，探究构造函数和new操作究竟是个什么东西。<br><a id="more"></a></p>
+<h1 id="The-new-Operator"><a href="#The-new-Operator" class="headerlink" title="The new Operator"></a>The new Operator</h1><p>首先我去翻了翻<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new" target="_blank">MDN关于New操作详解</a>，简单地摘一些比较关键的原文如下：</p>
+<blockquote>
+<p>When the code new <em>Foo</em>(…) is executed, the following things happen:</p>
+<ol>
+<li>A new object is created, inheriting from <em>Foo</em>.prototype</li>
+<li>The constructor function <em>Foo</em> is called with the specified arguments, and with this bound to the newly created object.</li>
+</ol>
+</blockquote>
+<p>用代码表示如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 模拟var foo = new Foo('foo')的过程</span></div><div class="line"></div><div class="line"><span class="comment">// A new object is created</span></div><div class="line"><span class="keyword">var</span> foo = &#123;&#125;</div><div class="line"></div><div class="line"><span class="comment">// inheriting from Foo.prototype</span></div><div class="line">foo.__proto__ = Foo.prototype</div><div class="line"></div><div class="line"><span class="comment">// The constructor function Foo is called with the specified arguments, and with this bound to the newly created object.</span></div><div class="line">Foo.call(foo, <span class="string">'foo'</span>)</div></pre></td></tr></table></figure></p>
+<p>为了更好的理解为什么是<code>foo.__proto__ = Foo.prototype</code>，我需要对<code>__proto__</code>和<code>prototype</code>之间的关系的作更深入探究。</p>
+<h1 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h1><ol>
+<li><code>prototype</code>是什么？<ul>
+<li>作为构造函数的一个属性</li>
+<li>包涵<strong><code>constructor</code></strong>字段的一个Object</li>
+</ul>
+</li>
+<li>谁有<code>prototype</code>？<ul>
+<li>所有非原生函数与原生构造函数</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 原生函数不能成为构造函数，没有prototype属性</span></div><div class="line"><span class="keyword">var</span> nativeFunction = <span class="built_in">Function</span>.prototype.call</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(nativeFunction.__proto__)			<span class="comment">// function () &#123;&#125;</span></div><div class="line"><span class="built_in">console</span>.log(nativeFunction.prototype)			<span class="comment">// undefined</span></div><div class="line"><span class="keyword">new</span> nativeFunction()							<span class="comment">// Uncaught TypeError: nativeFunction is not a constructor</span></div></pre></td></tr></table></figure>
+<p><code>prototype</code>是构造函数才具备的属性，称呼其“原型”，其实是<strong>相当不严谨甚至严重误导</strong>的说法。<strong><code>prototype</code>本质是JavaScript这门语言为开发人员操作原型对外暴露的一个接口。开发人员对<code>prototype</code>的操作，最终都会反映到该改构造函数的实例的<code>__proto__</code>上</strong>。</p>
+<p>热爱面向对象的朋友一定很熟悉下面这段代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line">Foo.prototype = &#123;</div><div class="line">	<span class="keyword">constructor</span>: Foo,</div><div class="line">	// ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">var foo = new Foo()</div></pre></td></tr></table></figure></p>
+<p>我们重写了<code>Foo.prototype</code>，都必须手动添加<code>constructor</code>。如果不这样做的话，实例的原型<code>foo.__proto__</code>将找不到<code>constructor</code>。</p>
+<h1 id="proto"><a href="#proto" class="headerlink" title="[[proto]]"></a>[[proto]]</h1><ol>
+<li><code>__proto__</code>是什么？<ul>
+<li>原型链上的一个原型</li>
+</ul>
+</li>
+<li>谁有<code>__proto__</code>？<ul>
+<li>所有Object都有（null除外）</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</div><div class="line"><span class="keyword">var</span> foo = <span class="keyword">new</span> Foo()</div><div class="line"></div><div class="line"><span class="comment">// 构造函数 Foo =&gt; function () &#123;&#125; =&gt; Object &#123;&#125; =&gt; null</span></div><div class="line"><span class="built_in">console</span>.log(Foo.__proto__)						<span class="comment">// function () &#123;&#125;</span></div><div class="line"><span class="built_in">console</span>.log(Foo.__proto__.__proto__)				<span class="comment">// Object &#123;&#125; | 注意与构造函数Object区别</span></div><div class="line"><span class="built_in">console</span>.log(Foo.__proto__.__proto__.__proto__)		<span class="comment">// null | 是不是很意外？typeof null === Object并非空穴来风</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 实例 foo =&gt; &#123; constructor: (...), __proto__: (...) &#125; =&gt; Object &#123;&#125; =&gt; null</span></div><div class="line"><span class="built_in">console</span>.log(foo.__proto__) 						<span class="comment">// &#123; constructor, __proto__,... &#125; | 这是由Foo的prototype属性决定的</span></div><div class="line"><span class="built_in">console</span>.log(foo.__proto__.__proto__)				<span class="comment">// Object &#123;&#125;</span></div><div class="line"><span class="built_in">console</span>.log(foo.__proto__.__proto__.__proto__)		<span class="comment">// null</span></div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>prototype</code>的意义在于开发人员可以以此定义实例的原型，这也是<code>JavaScript</code>面向对象的基础。<br><code>__proto__</code>在原型的维度上自成一列，构建了<code>JavaScript</code>强大的原型体系，与<code>prototype</code>不是一个层次上的概念。<br>如果一定要说二者有什么关系的话，我觉得应该说<strong>毫无关系</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 这不是代码</span></div><div class="line">Foo.prototype.constructor =&gt; Foo</div><div class="line">Foo.prototype.constructor.prototype.constructor =&gt; Foo</div><div class="line">Foo.prototype.constructor.prototype.constructor.prototype.constructor =&gt; Foo</div><div class="line">Foo.prototype.constructor.prototype.constructor.prototype.constructor.prototype.constructor =&gt; Foo</div><div class="line"><span class="comment">// 无穷无尽... 我仿佛看见了循环链表的数据结构</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/ECMAScript/">ECMAScript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/0420.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">关于“变量提升”中函数声明与函数表达式的区别</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/article/2017/0404.html">
+        <span class="next-text nav-default">JavaScript常见排序算法整理</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>

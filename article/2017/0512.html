@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="三个小伙伴call，apply与bind的故事"/>
+
+
+
+
+  <meta name="keywords" content="ECMAScript, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/0512.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> 三个小伙伴call，apply与bind的故事 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          三个小伙伴call，apply与bind的故事
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-05-12
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/0512.html"
+             data-title="三个小伙伴call，apply与bind的故事">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+
+    <div class="post-content">
+      
+        <p>长篇大论什么的，容易犯困。也许讲一个故事，可以更好的理解。<br><a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var common = &#123;</div><div class="line">	name: &apos;common&apos;,</div><div class="line">	sum: function () &#123;</div><div class="line">		return this.name + &apos;:&apos; +</div><div class="line">		[].slice.call(arguments).reduce( (prev, next) =&gt; &#123;</div><div class="line">			return prev + next</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">common.sum(1, 2, 3, 4, 5)  // common:15</div></pre></td></tr></table></figure>
+<p>以上这个家伙名字叫common，它有一个“机器”叫作sum，扔一堆东西进去这个机器就会“打包”好，还给属好名字，真是个好“机器”啊！<br>现在有三个家伙，名字分别叫call，apply，bind。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var c = new Call(&apos;call&apos;)</div><div class="line">var a = new Apply(&apos;apply&apos;)</div><div class="line">var b = new Bind(&apos;bind&apos;)</div><div class="line"></div><div class="line">function Call (name) &#123;</div><div class="line">	this.name = name</div><div class="line">&#125;</div><div class="line">function Apply (name) &#123;</div><div class="line">	this.name = name</div><div class="line">&#125;</div><div class="line">function Bind (name) &#123;</div><div class="line">	this.name = name</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这三个家伙羡慕嫉妒恨common，也想拥有这个好用的“机器”，可是common偏偏不给他们用。于是这些狡猾的家伙约定一起去“偷”common的“机器”。</p>
+<ul>
+<li>call</li>
+</ul>
+<p>call跑得快，第一个得手。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">common.sum.call(c, 1, 2, 3, 4, 5)  // call:15</div></pre></td></tr></table></figure>
+<ul>
+<li>apply</li>
+</ul>
+<p>apply看了看call，心里想“call这个笨蛋，一个一个东西放进机器中，那100个岂不是要放100次？”<br>于是它把所有的东西放在袋子里，再把袋子扔进机器了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">common.sum.apply(a, [1, 2, 3, 4, 5])  // apply:15</div></pre></td></tr></table></figure>
+<ul>
+<li>bind</li>
+</ul>
+<p>bind看了楼上得意洋洋的两位，心想“这两个笨蛋，人与人是终究是不一样的”。<br>于是它模仿着机器，造了一个高仿机器，下次要用的时候，就不用再来偷了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var sum = common.sum.bind(b, ...args)  // function () &#123;&#125;</div><div class="line">sum()  // bind:15</div></pre></td></tr></table></figure>
+<p>最后，它们三个家伙因为偷东西，被回收了。。。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/ECMAScript/">ECMAScript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/0826.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">基于Nodejs爬虫简单对比Callback、Promise与Async</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/article/2017/0420.html">
+        <span class="next-text nav-default">关于“变量提升”中函数声明与函数表达式的区别</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>

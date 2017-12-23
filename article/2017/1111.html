@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="React模态框设计思想"/>
+
+
+
+
+  <meta name="keywords" content="React, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2017/1111.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> React模态框设计思想 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          React模态框设计思想
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-11-11
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2017/1111.html"
+             data-title="React模态框设计思想">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#反面教材"><span class="toc-text">反面教材</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#追本溯源"><span class="toc-text">追本溯源</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>近期在开发一个Website Builder项目，有一个需求需要任何深度的小组件都能触发展示对应的模态框。正好看到了一篇与之相关的文章，甚感惊艳，遂写一篇博客，总结一下思想上的收获。<br><a id="more"></a></p>
+<h1 id="反面教材"><a href="#反面教材" class="headerlink" title="反面教材"></a>反面教材</h1><p>起初我也没有想太多，按照常规的全屏定位：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> style = &#123;</div><div class="line">  position: <span class="string">'fixed'</span>,</div><div class="line">  width: <span class="string">'100%'</span>,</div><div class="line">  heidth: <span class="string">'100%'</span>,</div><div class="line">  top: <span class="number">0</span>,</div><div class="line">  left: <span class="number">0</span>,</div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> Modal = <span class="function"><span class="params">props</span> =&gt;</span> (</div><div class="line">  &lt;div className=<span class="string">"modal"</span> style=&#123;style&#125;&gt;</div><div class="line">    &#123;props.childrend&#125;</div><div class="line">  &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">)</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">this</span>.state = &#123;</div><div class="line">    showModal: <span class="literal">false</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  toggleModal = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">showModal</span>: <span class="literal">true</span>&#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    &lt;div className=<span class="string">"app"</span>&gt;</div><div class="line">      &lt;button onClick=&#123;<span class="keyword">this</span>.toggleModal&#125;&gt;click to show&lt;<span class="regexp">/button&gt;</span></div><div class="line"><span class="regexp">      /</span><span class="regexp">/ ...</span></div><div class="line"><span class="regexp">      &#123;</span></div><div class="line"><span class="regexp">        this.state.showModal &amp;&amp;</span></div><div class="line"><span class="regexp">        &lt;Modal&gt;</span></div><div class="line"><span class="regexp">          /</span><span class="regexp">/ ...</span></div><div class="line"><span class="regexp">        &lt;/</span>Modal&gt;</div><div class="line">      &#125;</div><div class="line">    &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">  &#125;</span></div><div class="line"><span class="regexp">&#125;</span></div></pre></td></tr></table></figure>
+<p>这种做法初看没有什么问题，实际上在某些业务场景下是行不通的：</p>
+<ol>
+<li>当父级存在transform属性的时候，所有子孙节点的的Fixed定位都会失效。</li>
+<li><p>当Modal为低层级的节点后代时，无论自身<code>z-index</code>为多少，都无法位于最顶层级。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.left</span>,</div><div class="line"><span class="selector-class">.right</span> &#123;</div><div class="line">  <span class="attribute">position</span>: relative;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.left</span> &#123;</div><div class="line">  <span class="attribute">z-index</span>: <span class="number">3</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.right</span> &#123;</div><div class="line">  <span class="attribute">z-index</span>: <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> App = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;div className=<span class="string">"left"</span>&gt;Hello World&lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">    &lt;div className="right"&gt;</span></div><div class="line"><span class="regexp">      &lt;Modal&gt;</span></div><div class="line"><span class="regexp">        /</span><span class="regexp">/ ...</span></div><div class="line"><span class="regexp">      &lt;/</span>Modal&gt;</div><div class="line">    &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">  &lt;/</span>div&gt;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 此时的Modal并不能遮挡住Hello World</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="追本溯源"><a href="#追本溯源" class="headerlink" title="追本溯源"></a>追本溯源</h1><p>模态框的最佳实践是将其置于最顶层的位置以达到遮罩全局的作用。在JQuery的项目中，我们可以很轻松的做到：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'body'</span>).append(<span class="string">'&lt;div class="modal"&gt;&lt;/div&gt;'</span>)</div></pre></td></tr></table></figure></p>
+<p>在React组件化的开发模式下，目的是一样，问题在于如何达到这个目的。<br>由此可以提出以下两个问题：<br>&emsp;&emsp;<strong>1. 如何把Modal置于最优的位置？</strong><br>&emsp;&emsp;<strong>2. 深层次的组件如何传递展示Modal的信号？</strong></p>
+<p>于是我们的主角就登场了<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> ReactDom <span class="keyword">from</span> <span class="string">'react-dom'</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Modal</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  componentDidMount() &#123;</div><div class="line">    <span class="keyword">this</span>.modalTarget = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">    <span class="keyword">this</span>.modalTarget.className = <span class="string">'modal'</span></div><div class="line">    <span class="built_in">document</span>.body.appendChild(<span class="keyword">this</span>.modalTarget)</div><div class="line">    <span class="keyword">this</span>.renderModal()</div><div class="line">  &#125;</div><div class="line">  componentWillUpdate() &#123;</div><div class="line">    <span class="keyword">this</span>.renderModal()</div><div class="line">  &#125;</div><div class="line">  componentWillUnmount() &#123;</div><div class="line">    ReactDom.unmountComponentAtNode(<span class="keyword">this</span>.modalTarget)</div><div class="line">    <span class="built_in">document</span>.body.removeChild(<span class="keyword">this</span>.modalTarget)</div><div class="line">  &#125;</div><div class="line">  renderModal() &#123;</div><div class="line">    ReactDom.render(</div><div class="line">      &lt;div&gt;&#123; <span class="keyword">this</span>.props.children &#125;&lt;<span class="regexp">/div&gt;,</span></div><div class="line"><span class="regexp">      this.modalTarget</span></div><div class="line"><span class="regexp">    )</span></div><div class="line"><span class="regexp">  &#125;</span></div><div class="line"><span class="regexp">  render() &#123;</span></div><div class="line"><span class="regexp">    return &lt;noscript /</span>&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> Modal</div></pre></td></tr></table></figure></p>
+<p>此Modal组件实质并不用<code>render</code>函数返回任何东西，而是借助React的生命周期，在<code>componentDidMount</code>创建位于body下的占位符节点，之后将实质的内容<code>this.props.children</code>渲染至该节点上。<br>同时在<code>componentWillUpdate</code>中调用<code>renderModal</code>，保证了<code>props</code>改变了可以重绘UI。<br>另外，由于UI并非通过<code>render</code>函数渲染，所以在<code>componentWillUnmount</code>中必须手动完成<code>unmount</code>的操作。<br>到此，你就可以在任意组件中愉快的使用Modal组件啦~~~</p>
+<hr>
+<p>参考文章：<a href="https://zhuanlan.zhihu.com/p/30271961" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/30271961</a><br>作者：Lucas HC</p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/React/">React</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/article/2017/info.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">info</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/article/2017/1006.html">
+        <span class="next-text nav-default">React生命周期笔记</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+    
+    2017
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>
