@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="基于React组件浅谈代码复用的一些实践"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2018/0211.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> 基于React组件浅谈代码复用的一些实践 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          基于React组件浅谈代码复用的一些实践
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-02-11
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2018/0211.html"
+             data-title="基于React组件浅谈代码复用的一些实践">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#问题的起源"><span class="toc-text">问题的起源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一般函数形式"><span class="toc-text">一般函数形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decorator探索"><span class="toc-text">Decorator探索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#继承Extends的实现"><span class="toc-text">继承Extends的实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#优劣异同"><span class="toc-text">优劣异同</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>代码封装与复用是项目开发中比较重要的一块内容，其质量的高低很大程度的决定了后期迭代和维护成本。<br>近期在项目中遇到较为合适的场景，遂对此问题做了一些学习探索，写下本文总结收获。<br><a id="more"></a></p>
+<h1 id="问题的起源"><a href="#问题的起源" class="headerlink" title="问题的起源"></a><strong>问题的起源</strong></h1><p>在Website Builder类项目中，用户可自定义在页面中增加一些元素，以丰富自己的网站。下图为其中的三个元素：文本，按钮和图片。<br><img src="http://img.zcool.cn/zcool-diy/ibcf336b1772ae3aa33788206b081a7560.png" alt="文本、按钮、图片"><br>每一个元素是在代码层面都是React Component（即ES6 Class）它们具备一些相同功能，如：</p>
+<ol>
+<li>删除功能</li>
+<li>拖拽位移功能</li>
+<li>计算小菜单功能</li>
+<li>点击高亮选中功能</li>
+</ol>
+<p>但是在具体内容的实现上，又不尽相同。<br>考虑到后期的可维护性，必须选择一种方式把相同的业务逻辑抽象出来，统一封装。</p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a><strong>解决方案</strong></h1><h2 id="一般函数形式"><a href="#一般函数形式" class="headerlink" title="一般函数形式"></a>一般函数形式</h2><p>函数作为代码复用的最小单位，自然也是我们最容易想到的实现方式。比如事先定义好常用的工具方法：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * @param &#123;Number&#125; timestamp</span></div><div class="line"><span class="comment"> * @return &#123;String&#125;</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">formatDate</span>(<span class="params">timestamp</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="comment">// 1518321228 =&gt; 2018-02-11</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对应到React组件化的场景，可以理解为<strong>Class为函数，props为参数</strong>。代码如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">baseElement</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 将统一业务逻辑抽象在一个Class中</span></div><div class="line">  destroy = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// 不同的业务逻辑则以Props传入的形式渲染</span></div><div class="line">    <span class="keyword">const</span> Content = <span class="keyword">this</span>.props.Content</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;span className=<span class="string">"destroy-icon"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">span</span> <span class="attr">onClick</span>=<span class="string">&#123;this.destroy&#125;</span>&gt;</span></span></div><div class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Content</span>/&gt;</span></span></div><div class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Decorator探索"><a href="#Decorator探索" class="headerlink" title="Decorator探索"></a>Decorator探索</h2><p><code>Decorator</code>目前还处于Stage 1的阶段，不过因为“babel大法好”，我们已经可以在项目中使用了。不想写普及文了，不了解的小伙伴可以先去学习一下。</p>
+<p>整理了一些相关的资料：</p>
+<ul>
+<li><strong>TC-39:</strong> <a href="https://github.com/tc39/proposal-decorators" target="_blank" rel="external">https://github.com/tc39/proposal-decorators</a></li>
+<li><strong>Babel:</strong> <a href="https://babeljs.io/docs/plugins/transform-decorators/" target="_blank" rel="external">https://babeljs.io/docs/plugins/transform-decorators/</a></li>
+<li><strong>阮一峰老师的中文教程：</strong> <a href="http://es6.ruanyifeng.com/#docs/decorator" target="_blank" rel="external">http://es6.ruanyifeng.com/#docs/decorator</a></li>
+</ul>
+<p><code>Decorator</code>作为修饰器，可将统一的业务逻辑抽象出来，通过非常简洁的方式把这些功能赋予新的Class。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">destroy</span>(<span class="params">target</span>) </span>&#123;</div><div class="line">  target.prototype.destroy = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// 具体删除功能的业务逻辑</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@destroy</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextElement</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props)</div><div class="line">    <span class="keyword">this</span>.destroy = <span class="keyword">this</span>.destroy.bind(<span class="keyword">this</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@destroy</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ImgElement</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props)</div><div class="line">    <span class="keyword">this</span>.destroy = <span class="keyword">this</span>.destroy.bind(<span class="keyword">this</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="继承Extends的实现"><a href="#继承Extends的实现" class="headerlink" title="继承Extends的实现"></a>继承Extends的实现</h2><p>继承在此类业务场景下是非常适用的，也是我最终选择的方案。在父类定义好公共的部分，子类实现私有的部分。需要一点点面向对象的思想，“身体发肤受之父母，职业选择由我决定”。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 将公共的业务逻辑抽象到父类中</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseElement</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  destroy = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="comment">// 具体删除功能的业务逻辑</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextElement</span> <span class="keyword">extends</span> <span class="title">BaseElement</span> </span>&#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// 这样就可以直接调用this.destroy</span></div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ImgElement</span> <span class="keyword">extends</span> <span class="title">BaseElement</span> </span>&#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="优劣异同"><a href="#优劣异同" class="headerlink" title="优劣异同"></a><strong>优劣异同</strong></h1><p>以上三种代码封装方式，都可以提高代码的可维护性。但各有异同。我终结了以下几点：</p>
+<ul>
+<li><strong>函数式</strong>：<ul>
+<li>通用，可塑性好。比如希望把相同的UI也抽象出来，另外两种方式便做不到。</li>
+<li>存在组件通信，意味着有一定的耦合，当然这在很多场景下似乎是不可避免的。</li>
+</ul>
+</li>
+<li><strong>Decorator</strong>:<ul>
+<li>耦合度低，语法优雅。</li>
+<li>由于修饰对象为Class（可理解为<code>constructor</code>），故无法为目标添加实例方法，只能添加静态方法和原型方法。</li>
+</ul>
+</li>
+<li><strong>Extends</strong>:<ul>
+<li>比起<code>Decorator</code>, 继承的方式可以添加实例方法哦（这也是我最终选择该方案的重要原因）</li>
+</ul>
+</li>
+</ul>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a><strong>最后</strong></h1><p>本文涉及的知识点可能有点多，对新人不是很友好。外加本人水平有限，文笔凌乱，写得不好之处，还请多指正。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/article/2017/1111.html">
+        <span class="next-text nav-default">React模态框设计思想</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>
