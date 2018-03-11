@@ -22,6 +22,8 @@
 
 
 
+  <meta name="keywords" content="React, 项目积累, HiceFire" />
+
 
 
 
@@ -106,7 +108,7 @@
         <li class="mobile-menu-item">
           
           
-            Home
+            首页
           
         </li>
       </a>
@@ -115,7 +117,7 @@
         <li class="mobile-menu-item">
           
           
-            Archives
+            归档
           
         </li>
       </a>
@@ -124,7 +126,7 @@
         <li class="mobile-menu-item">
           
           
-            Tags
+            标签
           
         </li>
       </a>
@@ -133,7 +135,7 @@
         <li class="mobile-menu-item">
           
           
-            About
+            关于
           
         </li>
       </a>
@@ -154,7 +156,7 @@
           <a class="menu-item-link" href="/">
             
             
-              Home
+              首页
             
           </a>
         </li>
@@ -163,7 +165,7 @@
           <a class="menu-item-link" href="/archives/">
             
             
-              Archives
+              归档
             
           </a>
         </li>
@@ -172,7 +174,7 @@
           <a class="menu-item-link" href="/tags">
             
             
-              Tags
+              标签
             
           </a>
         </li>
@@ -181,7 +183,7 @@
           <a class="menu-item-link" href="/about">
             
             
-              About
+              关于
             
           </a>
         </li>
@@ -223,7 +225,7 @@
     
     
   <div class="post-toc" id="post-toc">
-    <h2 class="post-toc-title">Contents</h2>
+    <h2 class="post-toc-title">文章目录</h2>
     <div class="post-toc-content">
       <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#问题的起源"><span class="toc-text">问题的起源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一般函数形式"><span class="toc-text">一般函数形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decorator探索"><span class="toc-text">Decorator探索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#继承Extends的实现"><span class="toc-text">继承Extends的实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#优劣异同"><span class="toc-text">优劣异同</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
     </div>
@@ -242,7 +244,7 @@
 </ol>
 <p>但是在具体内容的实现上，又不尽相同。<br>考虑到后期的可维护性，必须选择一种方式把相同的业务逻辑抽象出来，统一封装。</p>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a><strong>解决方案</strong></h1><h2 id="一般函数形式"><a href="#一般函数形式" class="headerlink" title="一般函数形式"></a>一般函数形式</h2><p>函数作为代码复用的最小单位，自然也是我们最容易想到的实现方式。比如事先定义好常用的工具方法：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * @param &#123;Number&#125; timestamp</span></div><div class="line"><span class="comment"> * @return &#123;String&#125;</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">formatDate</span>(<span class="params">timestamp</span>) </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="comment">// 1518321228 =&gt; 2018-02-11</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>对应到React组件化的场景，可以理解为<strong>Class为函数，props为参数</strong>。代码如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">baseElement</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 将统一业务逻辑抽象在一个Class中</span></div><div class="line">  destroy = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// 不同的业务逻辑则以Props传入的形式渲染</span></div><div class="line">    <span class="keyword">const</span> Content = <span class="keyword">this</span>.props.Content</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;span className=<span class="string">"destroy-icon"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">span</span> <span class="attr">onClick</span>=<span class="string">&#123;this.destroy&#125;</span>&gt;</span></span></div><div class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Content</span>/&gt;</span></span></div><div class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对应到React组件化的场景，可以理解为<strong>Class为函数，props为参数</strong>。代码如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">baseElement</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// 将统一业务逻辑抽象在一个Class中</span></div><div class="line">  destroy = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// 不同的业务逻辑则以Props传入的形式渲染</span></div><div class="line">    <span class="keyword">const</span> Content = <span class="keyword">this</span>.props.Content</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;span className=<span class="string">"destroy-icon"</span>&gt;&lt;/span onClick=&#123;this.destroy&#125;&gt;</div><div class="line">      &lt;Content/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h2 id="Decorator探索"><a href="#Decorator探索" class="headerlink" title="Decorator探索"></a>Decorator探索</h2><p><code>Decorator</code>目前还处于Stage 1的阶段，不过因为“babel大法好”，我们已经可以在项目中使用了。不想写普及文了，不了解的小伙伴可以先去学习一下。</p>
 <p>整理了一些相关的资料：</p>
 <ul>
@@ -287,14 +289,28 @@
     
       <footer class="post-footer">
         
+          <div class="post-tags">
+            
+              <a href="/tags/React/">React</a>
+            
+              <a href="/tags/项目积累/">项目积累</a>
+            
+          </div>
+        
         
         
   <nav class="post-nav">
     
+      <a class="prev" href="/article/2018/0311.html">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Generator总结笔记</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
     
       <a class="next" href="/article/2017/1111.html">
         <span class="next-text nav-default">React模态框设计思想</span>
-        <span class="prev-text nav-mobile">Next</span>
+        <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
     
@@ -353,11 +369,11 @@
 
 <div class="copyright">
   <span class="power-by">
-    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme - 
+    主题 - 
     <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
   </span>
 

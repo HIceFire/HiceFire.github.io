@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Generator总结笔记"/>
+
+
+
+
+  <meta name="keywords" content="ECMAScript, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2018/0311.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> Generator总结笔记 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Generator总结笔记
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-03-11
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2018/0311.html"
+             data-title="Generator总结笔记">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础语法"><span class="toc-text">基础语法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Iterator接口"><span class="toc-text">Iterator接口</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#next方法参数的作用"><span class="toc-text">next方法参数的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#异常机制"><span class="toc-text">异常机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p><a href="http://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="external">Generator</a>函数是 ES6 提供的一种异步编程解决方案。但是在实际的工作环境中，使用的场景并不多见（多数场景使用<a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="external">Async</a>函数）。每次面试前都要重新去翻一遍文档，故写一篇总结，以备忘。</p>
+<a id="more"></a>
+<h1 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h1><p>如以下代码，<code>Generator</code>函数以<code>*</code>号为标识，函数内部使用<code>yield</code>表达式定义不同的返还状态。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">helloWorldGenerator</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> <span class="string">'hello'</span></div><div class="line">  <span class="keyword">yield</span> <span class="string">'world'</span></div><div class="line">  <span class="keyword">return</span> <span class="string">'ending'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过调用<code>next</code>方法，触发<code>yield</code>表达式。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> hw = helloWorldGenerator()</div><div class="line">hw.next()  <span class="comment">// &#123; value: 'hello', done: false &#125;</span></div><div class="line">hw.next()  <span class="comment">// &#123; value: 'world', done: false &#125;</span></div><div class="line">hw.next()  <span class="comment">// &#123; value: 'ending', done: true &#125;</span></div></pre></td></tr></table></figure></p>
+<p>另外，<code>Generator</code>函数在调用<code>next</code>方法之前，并不会执行任何内部代码哦。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">logGenerator</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> lg = logGenerator() <span class="comment">// 并不会执行log哦</span></div><div class="line">lg.next()  <span class="comment">// log: hello world, return: &#123; value: undefined, done: true &#125;</span></div></pre></td></tr></table></figure></p>
+<h1 id="Iterator接口"><a href="#Iterator接口" class="headerlink" title="Iterator接口"></a>Iterator接口</h1><p><code>Generator</code>函数自身执行会返还一个具有<code>Symbol.iterator</code>接口的遍历器对象。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> myIterable = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> <span class="number">1</span></div><div class="line">  <span class="keyword">yield</span> <span class="number">2</span></div><div class="line">  <span class="keyword">yield</span> <span class="number">3</span></div><div class="line">  <span class="keyword">return</span> <span class="number">4</span></div><div class="line">&#125;()</div><div class="line"></div><div class="line">[...myIterable] <span class="comment">// [1, 2, 3]</span></div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> v <span class="keyword">of</span> myIterable) &#123;</div><div class="line">  <span class="built_in">console</span>.log(v)</div><div class="line">&#125;</div><div class="line"><span class="comment">// 1 2 3</span></div></pre></td></tr></table></figure></p>
+<h1 id="next方法参数的作用"><a href="#next方法参数的作用" class="headerlink" title="next方法参数的作用"></a>next方法参数的作用</h1><p>首先看看以下这段代码，猜猜看调用<code>next</code>方法的结果~~<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> y = <span class="keyword">yield</span> x + <span class="number">2</span></div><div class="line">  <span class="keyword">yield</span> y + <span class="number">3</span></div><div class="line">  <span class="keyword">return</span> y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> g = gen(<span class="number">1</span>)</div></pre></td></tr></table></figure></p>
+<p>结果如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">g.next() <span class="comment">// &#123; value: 3, done: false &#125;</span></div><div class="line">g.next() <span class="comment">// &#123; value: NaN, done: true &#125;</span></div><div class="line">g.next() <span class="comment">// &#123; value: undefined, done: true &#125;</span></div></pre></td></tr></table></figure></p>
+<p>不用意外，<code>x + 2</code>包含在<code>next</code>的返还值中。<br><code>yield</code>表达式并没有默认返还值，即<code>undefined</code>，<strong>但是，我们可以通过给<code>next</code>方法传递参数，作为<code>yield</code>表达式的返回值。</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">g.next() <span class="comment">// &#123; value: 3, done: false &#125;</span></div><div class="line">g.next(<span class="number">3</span>) <span class="comment">// &#123; value: 6, done: false &#125;</span></div><div class="line">g.next() <span class="comment">// &#123; value: 3, done: true &#125;</span></div></pre></td></tr></table></figure></p>
+<p>其实学习到这里，就会明白为什么会出现更高一层的封装了<code>Async</code>函数了，如果代码后续对<code>yield</code>表达式的结果有依赖，还必须手动把前一个<code>next</code>的返还值传递给下一个<code>next</code>的参数，这实在是有那么一点儿不友好~</p>
+<h1 id="异常机制"><a href="#异常机制" class="headerlink" title="异常机制"></a>异常机制</h1><p><code>Generator</code>函数返回遍历器对象，提供了原生的<code>Generator.prototype.throw</code>方法。可以在函数体外抛出对象，并在 <code>Generator</code>函数体内捕获。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">yield</span> <span class="number">1</span></div><div class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'内部捕获'</span>, e)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">yield</span> <span class="number">2</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> g = gen()</div><div class="line"></div><div class="line"><span class="keyword">const</span> test1 = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    g.throw(<span class="string">'error1'</span>)</div><div class="line">  &#125; <span class="keyword">catch</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'外部捕获'</span>, e)</div><div class="line">  &#125;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="keyword">const</span> test2 = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  g.next()</div><div class="line">  <span class="keyword">const</span> a = g.throw(<span class="string">'error2'</span>)</div><div class="line">  <span class="built_in">console</span>.log(a)</div><div class="line">&#125; </div><div class="line"></div><div class="line">test1()  <span class="comment">// 外部捕获 error1</span></div><div class="line"></div><div class="line">test2()  <span class="comment">// 内部捕获 error2  &#123;value: 2, done: false&#125;</span></div></pre></td></tr></table></figure></p>
+<ul>
+<li><p><strong>执行测试函数<code>test1</code>：</strong><br>函数还处于计算<code>yield</code>表达式计算的阶段，内部的<code>try...catch</code>并未生效，因此内部的异常被抛出，被全局的<code>try...catch</code>捕获。从中我们也可以更好理解<code>Generator</code>函数的执行机制。</p>
+</li>
+<li><p><strong>执行测试函数<code>test2</code>：</strong><br><code>g.next()</code>的执行已经完成第一个<code>yield</code>的计算，因此使用<code>g.throw(&#39;error1&#39;)</code>被内部的<code>try...catch</code>捕获。同时使用<code>throw</code>方法会调用<code>next</code>方法，因此我们得到的返回值<code>a = {value: 2, done: false}</code>。有木有很神奇~</p>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><code>Generator</code>函数虽然很神奇，但是依然存在不足。如果经常使用<code>Async</code>函数，应该可以明显的感觉得到以下两个：</p>
+<ol>
+<li>需要手动调用<code>next</code>方法执行<code>yield</code>表达式。</li>
+<li>对于<code>yield</code>表达式的返还值，需要手动的加入到下一个<code>next</code>方法的参数中。</li>
+</ol>
+<hr>
+<p>参考文章：<a href="http://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="external">http://es6.ruanyifeng.com/#docs/generator</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/ECMAScript/">ECMAScript</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/article/2018/0211.html">
+        <span class="next-text nav-default">基于React组件浅谈代码复用的一些实践</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>
