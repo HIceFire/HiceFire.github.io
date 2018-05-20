@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Ant Design源码解析之rc-select组件"/>
+
+
+
+
+  <meta name="keywords" content="React, Antd, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2018/0513.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> Ant Design源码解析之rc-select组件 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Ant Design源码解析之rc-select组件
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-05-13
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2018/0513.html"
+             data-title="Ant Design源码解析之rc-select组件">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#错误的例子"><span class="toc-text">错误的例子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第一直觉"><span class="toc-text">第一直觉</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Render-in-body"><span class="toc-text">Render in body</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#位置计算与滚动同步"><span class="toc-text">位置计算与滚动同步</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#进一步讨论"><span class="toc-text">进一步讨论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>下拉列表组件Select可以是前端使用频率最高的UI组件之一。正因此，原生HTML也存在这一标签。但由于对UI的较高追求及统一规范，我们往往不会去使用即不好看又不统一的原生Select标签，而是自己实现。能够写出一个“多数场景下能用”的Select组件，并没有什么难度。直到遇到一些特殊的场景，才意识到要想完成一个组件库级别的作品，并非易事。本文将会阐述在实际生产环境中因为遇到的问题，并分享Antd的<a href="https://github.com/react-component/select" target="_blank" rel="external">rc-select</a>源码中解决问题的方式。<br><a id="more"></a></p>
+<h1 id="错误的例子"><a href="#错误的例子" class="headerlink" title="错误的例子"></a>错误的例子</h1><p>近期在工作的项目开发中，需要实现一个Select组件。本着“重复造轮子使我开心”的原则，打开VSCode就是一顿自我感觉良好的操作。<br>直到感觉不太好的用户给我发来一张gif图：</p>
+<div align="center"><br><img src="//static.zcool.cn/zcool/build/common/select_error.gif" alt="bug动图"><br></div>
+
+<p>“BUG”版Select组件实现比较简单，一个相对定位的Selection + 一个绝对定位的DropdownMenu即可。<br>针对以上实现，我大致总结了在以下三种场景下会有问题：</p>
+<ol>
+<li>父级容器<code>overflow: auto</code>，Select组件位于较下方。</li>
+<li>父级容器<code>overflow: hidden</code>，Select组件位于较下方。</li>
+<li>父级容器的层级较低时，高层级元素与DropdownMenu位置重合。</li>
+</ol>
+<p>针对以上场景，分别做了一个简单的demo。<br><img src="//static.zcool.cn/zcool/build/common/select_error_all.gif" alt="导致错误的场景"><br><a href="http://www.vq0599.com/blog-demo/" target="_blank" rel="external">在线预览</a><br>鉴于以上场景都不属于小众场景，所以这个“BUG版”的Select组件显然是不合格。</p>
+<h1 id="第一直觉"><a href="#第一直觉" class="headerlink" title="第一直觉"></a>第一直觉</h1><p>其实如果经验相对丰富的小伙伴，面对这样的问题应该会条件反射到“render in body”这一概念。（啥是“render in body”呢？React项目中针对需要最高层级展示的组件，即可避开其他组件的影响，同时保留组件化写法的实现方式。最典型的为Modal组件，具体细节可参考我之前写的<a href="//www.vq0599.com/article/2017/1111.html">相关总结</a>）<br>但是Select组件的问题会比一般的“render in body”复杂许多，我们姑且以这种方式实现，把需要解决的问题总结为以下两点，并以此为目标探究<a href="https://github.com/ant-design/ant-design" target="_blank" rel="external">Ant Design</a>中相关组件源码。</p>
+<ol>
+<li>如何避免其他元素对DropdownMenu的影响？及对DropdownMenu其他元素的影响？(render in body)</li>
+<li>Selection和DropdownMenu分离在不同DOM层级，相对位置如何计算？页面滚动时，两者的位置能保证不变吗？</li>
+</ol>
+<p>（为了便于行文，下文将统一称呼Select组件的触发区域为Selection，下拉菜单为DropdownMenu）</p>
+<h1 id="Render-in-body"><a href="#Render-in-body" class="headerlink" title="Render in body"></a>Render in body</h1><p>“render in body”作为React项目一系列问题的最佳实践，虽然我已经多次领教它的好处。但在具体实现上，Ant Design的拆分粒度还是非常值得学习的。<a href="https://github.com/react-component/util/blob/master/src/Portal.js" target="_blank" rel="external">Portal.js</a>是Ant Design库中专门实现这一功能的抽象。在Select组件中，DropdownMenu将会通过Portal.js渲染，以此解决上述问题1。<br>具体逻辑可简化为以下几点：</p>
+<ol>
+<li>componentDidMount: create一个Div至于root节点下，赋值给<code>this._container</code>。</li>
+<li>render: <code>return ReactDOM.createPortal(this.props.children, this._container)</code> (其中<code>this.props.children</code>包含着DropdownMenu)</li>
+<li>componentWillUnmount: 删除<code>this._container</code><br>以下是一些关键的代码<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Portal.js</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Portal</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  componentDidMount() &#123;</div><div class="line">    <span class="keyword">this</span>.createContainer();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentWillUnmount() &#123;</div><div class="line">    <span class="keyword">this</span>.removeContainer();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  createContainer() &#123;</div><div class="line">    <span class="keyword">this</span>._container = <span class="keyword">this</span>.props.getContainer();</div><div class="line">    <span class="keyword">this</span>.forceUpdate();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._container) &#123;</div><div class="line">      <span class="keyword">return</span> ReactDOM.createPortal(<span class="keyword">this</span>.props.children, <span class="keyword">this</span>._container);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 上述组件的this.props.getContainer</span></div><div class="line">getContainer = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> &#123; props &#125; = <span class="keyword">this</span>;</div><div class="line">    <span class="keyword">const</span> popupContainer = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line">    popupContainer.style.position = <span class="string">'absolute'</span>;</div><div class="line">    popupContainer.style.top = <span class="string">'0'</span>;</div><div class="line">    popupContainer.style.left = <span class="string">'0'</span>;</div><div class="line">    popupContainer.style.width = <span class="string">'100%'</span>;</div><div class="line"></div><div class="line">    <span class="comment">// mountNode: 划重点，后文详细叙述</span></div><div class="line">    <span class="keyword">const</span> mountNode = props.getPopupContainer ?</div><div class="line">      props.getPopupContainer(findDOMNode(<span class="keyword">this</span>)) : props.getDocument().body;</div><div class="line">    mountNode.appendChild(popupContainer);</div><div class="line">    <span class="keyword">return</span> popupContainer;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="位置计算与滚动同步"><a href="#位置计算与滚动同步" class="headerlink" title="位置计算与滚动同步"></a>位置计算与滚动同步</h1><p>由于DropdownMenu位于body节点位置，所以就涉及到Selection与DropdownMenu的位置计算问题。渲染DropdownMenu的源码可简化为如下结构：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;Protal&gt;</div><div class="line">  &lt;Animate&gt;</div><div class="line">    &lt;Align&gt;</div><div class="line">      &lt;DropdownMenu/&gt;</div><div class="line">    &lt;<span class="regexp">/Align&gt;</span></div><div class="line"><span class="regexp">  &lt;/</span>Animate&gt;</div><div class="line">&lt;<span class="regexp">/Protal&gt;</span></div></pre></td></tr></table></figure></p>
+<p>其中<code>Protal</code>是将Children渲染至body下，<code>Animate</code>是控制展示/收起动画，而<code>Align</code>这个包，就是用于计算位置的。<br><strong>多数情况下</strong>，Selection相对页面的位置是静态的，天然随着页面的滚动而滚动。而DropdownMenu以绝对定位的形式存在于body下，也是天然随着页面的滚动而滚动的，因此只要计算好Selection相对页面的位置，根据用户需要略微调整赋值给DropdownMenu即可。<br>计算思路： 元素相对可视区的距离<code>element.getBoundingClientRect.top/left</code> + 页面滚动距离<code>documentElement.scrollTop/Left</code>即可。（具体计算细节十分巧妙且复杂，下文统一展开）<br>关键代码如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// dom-align src/utils.js</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getOffset</span>(<span class="params">el</span>) </span>&#123;</div><div class="line">  <span class="comment">// 获取相对可视区的距离</span></div><div class="line">  <span class="keyword">const</span> pos = getClientPosition(el);</div><div class="line">  <span class="keyword">const</span> doc = el.ownerDocument;</div><div class="line">  <span class="keyword">const</span> w = doc.defaultView || doc.parentWindow;</div><div class="line">  <span class="comment">// 加等页面滚动距离</span></div><div class="line">  pos.left += getScrollLeft(w);</div><div class="line">  pos.top += getScrollTop(w);</div><div class="line">  <span class="keyword">return</span> pos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="进一步讨论"><a href="#进一步讨论" class="headerlink" title="进一步讨论"></a>进一步讨论</h1><p>上文在解决位置计算与同步滚动的问题上，为了便于理解，我们默认了一个观点:</p>
+<blockquote>
+<p>多数情况下，Selection相对页面的位置是静态的，天然随着页面的滚动而滚动。</p>
+</blockquote>
+<p>实际场景中，Selection很有可能处在独立的滚动区域，并非天然随着页面的滚动而滚动。</p>
+<div align="center"><br><img src="http://static.zcool.cn/zcool/build/common/scroll_error.gif" alt="Selection处于独立滚动区域而引发的bug"><br></div><br>上图中，Selection位于一个独立的滚动区域，而DropdownMenu位于body下。因此出现了图中的状况：<br>- 当页面级别的滚动时，Selection与DropdownMenu的位置可以保证同步。<br>- 当Selection所处的独立区域滚动时，位置就会发生错乱。<br><br>如何解决呢？<br>在<a href="https://ant.design/components/select/" target="_blank" rel="external">Ant Design Select组件</a>的文档中，有一个特殊的props:<br><div align="center"><br><img src="http://static.zcool.cn/zcool/build/common/antd_select.png" alt="getPopupContainer"><br></div><br>上文在渲染DropdownMenu的代码中，有一处注释让大家留意的：<br><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">getContainer = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">const</span> mountNode = props.getPopupContainer ?</div><div class="line">    props.getPopupContainer(findDOMNode(<span class="keyword">this</span>)) : props.getDocument().body;</div><div class="line">  mountNode.appendChild(popupContainer);</div><div class="line">  <span class="keyword">return</span> popupContainer;</div><div class="line">&#125;</div></pre></td></tr></table></figure><br><br>如果用户设置了props<code>getPopupContainer</code>，此处的<code>mountNode</code>将会是Selection所处的滚动父级，即DropdownMenu将会被渲染在Selection的滚动父级下，而不再是“render in body”。<br>放一张设置了正确的<code>getPopupContainer</code>Chrome Element截图大家感受一下：<br><div align="center"><br><img src="//static.zcool.cn/zcool/build/common/select_element.png" alt="Selection处于独立滚动区域而引发的bug"><br></div>
+
+<p>在计算DropdownMenu的位置上，dom-align的算法策略十分巧妙，避免了区分滚动父级是否是body的问题，但略显得过于复杂。<br>（以下过程均以<code>top</code>值为例，<code>left</code>值同理）</p>
+<ol>
+<li>通过<code>element.getBoundingClientRect</code>计算出Selection的相对可视区的绝对位置<code>top1</code>。</li>
+<li>通过用户设置的Props（即摆放的方向，间距等）计算出DropdownMenu相对可视区的绝对位置<code>top2</code>。</li>
+<li>将DropdownMenu的top值设置为-9999，并通过<code>element.getBoundingClientRect</code>获取DropdownMenu当前top值<code>top3</code>。<ul>
+<li>如果DropdownMenu位于body下，<code>top3 = 0 - 9999</code>。</li>
+<li>如果DropdownMenu并非位于body下，<code>top3 = 滚动父级至body的距离 - 9999</code>。</li>
+</ul>
+</li>
+<li><code>top4</code> = <code>top2 - top3</code> = <code>top2 - (滚动父级至body的距离 - 9999)</code> = <code>top2 - 滚动父级至body的距离 + 9999</code></li>
+<li><code>top5</code> = <code>-9999 + top4</code> = <code>-9999 + top2 - 滚动父级至body的距离 + 9999</code> = <code>top2 - 滚动父级至body的距离</code></li>
+</ol>
+<p>最终，<code>top5</code>将会是设置给DropdownMenu的真实style值。鉴于源码拆分较细，实现复杂，就不具体展示了。源码地址，<a href="https://github.com/yiminghe/dom-align" target="_blank" rel="external">https://github.com/yiminghe/dom-align</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>阅读源码的收获很多，鉴于篇幅有限，列出重点与大家分享，共同探讨。水平有限，如果错误欢迎大家指出。</p>
+<p>相关开源库：</p>
+<ul>
+<li><a href="https://github.com/react-component/select" target="_blank" rel="external">rc-select@8.0.8</a></li>
+<li><a href="https://github.com/react-component/trigger" target="_blank" rel="external">rc-trigger@2.4.0</a></li>
+<li><a href="http://github.com/react-component/util" target="_blank" rel="external">rc-util@4.5.0</a></li>
+<li><a href="http://github.com/react-component/align" target="_blank" rel="external">rc-align@2.3.6</a></li>
+<li><a href="https://github.com/yiminghe/dom-align" target="_blank" rel="external">dom-align@1.6.7</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/React/">React</a>
+            
+              <a href="/tags/Antd/">Antd</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/article/2018/0315.html">
+        <span class="next-text nav-default">Ant Design源码解析之rc-notification组件</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>
