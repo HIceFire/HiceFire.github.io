@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="React项目中Modal组件设计思想"/>
+
+
+
+
+  <meta name="keywords" content="React, Modal, HiceFire" />
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="HiceFire">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.6.0" />
+
+
+
+<link rel="canonical" href="https://hicefire.github.io/article/2018/0805.html"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.6.0" />
+
+
+
+
+
+
+  
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "ynUFi4RccBXrxCm2EybC1qBd-gzGzoHsz",
+      appKey: "N5DjljfLLHablEuT6YbHIcTb"
+    });
+  </script>
+
+
+
+
+
+    <title> React项目中Modal组件设计思想 - HiceFire </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">HiceFire</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            关于
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">HiceFire</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              关于
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          React项目中Modal组件设计思想
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-08-05
+        </span>
+        
+        
+        <div class="post-visits"
+             data-url="/article/2018/0805.html"
+             data-title="React项目中Modal组件设计思想">
+            阅读次数
+          </div>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#遇到的问题"><span class="toc-text">遇到的问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#uncontrolled思想的扩展"><span class="toc-text">uncontrolled思想的扩展</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一个uncontrolled模式的Alert组件"><span class="toc-text">一个uncontrolled模式的Alert组件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#不同场景下的不同选择"><span class="toc-text">不同场景下的不同选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结语"><span class="toc-text">结语</span></a></li></ol>
+    </div>
+  </div>
+
+
+    <div class="post-content">
+      
+        <p>早些时候，我阅读过一篇关于React Modal组件的文章<a href="https://zhuanlan.zhihu.com/p/30271961" target="_blank" rel="external">模态框秘密和“轮子”渐进设计</a>，收获颇丰，并用于实际生产环境。但在个人实践的过程中，该文的方法论虽然解决组件渲染与调用分离的问题，却依然存在一些使用痛点。本文将会介绍自己在生产环境中遇到的问题，并参考一些行业普遍解决问题的方式，做出总结。<br><a id="more"></a><br>注：本文难度不高，但需要有一定的React项目实践。可能对于新人的可读性有些差，见谅~</p>
+<h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><p>在一般React的项目中，我们通常会使用如下的方式调用Modal组件：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  state = &#123; <span class="attr">visible</span>: <span class="literal">false</span> &#125;</div><div class="line"></div><div class="line">  handleShowModal = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">visible</span>: <span class="literal">true</span> &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  handleHideModal = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">visible</span>: <span class="literal">false</span> &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;button onClick=&#123;<span class="keyword">this</span>.handleShowModal&#125;&gt;Open&lt;<span class="regexp">/button&gt;</span></div><div class="line"><span class="regexp">        &lt;Modal</span></div><div class="line"><span class="regexp">          visible=&#123;this.state.visible&#125;</span></div><div class="line"><span class="regexp">          onCancel=&#123;this.handleHideModal&#125;</span></div><div class="line"><span class="regexp">        &gt;</span></div><div class="line"><span class="regexp">          &lt;p&gt;Some contents...&lt;/</span>p&gt;</div><div class="line">          &lt;p&gt;Some contents...&lt;<span class="regexp">/p&gt;</span></div><div class="line"><span class="regexp">        &lt;/</span>Modal&gt;</div><div class="line">      &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">    )</span></div><div class="line"><span class="regexp">  &#125;</span></div><div class="line"><span class="regexp">&#125;</span></div></pre></td></tr></table></figure></p>
+<p>根据React渲染公式<code>UI=F(state, props)</code>，这么做并没有什么问题。<br>但是如果在某个组件中大量的使用到类Modal组件，我们就不得不定义大量的visible state和click handle function分别控制每个Modal的展开与关闭。最具代表性的莫过于自定义的Alert和Confirm组件，如果每次与用户交互都必须通过state控制，就显得过于繁琐，莫名地增加项目复杂度。<strong>为此，我们试图寻找一个更加简洁的方式，让Modal组件能够维护自身的展开与关闭的状态。</strong></p>
+<h1 id="uncontrolled思想的扩展"><a href="#uncontrolled思想的扩展" class="headerlink" title="uncontrolled思想的扩展"></a>uncontrolled思想的扩展</h1><p>uncontrolled是React中一个很重要概念，起源于（不知该概念是否更早于在其它领域出现过）React对一些form元素（input, textarea）的封装，<a href="https://reactjs.org/docs/uncontrolled-components.html" target="_blank" rel="external">官方文档</a>给出一些描述：</p>
+<blockquote>
+<p>In most cases, we recommend using controlled components to implement forms. In a controlled component, form data is handled by a React component. The alternative is uncontrolled components, where form data is handled by the DOM itself.</p>
+</blockquote>
+<p>简单的总结为：“不再将form data定义成某个state，而是由原生元素完全控制”。<br>实际上，uncontrolled的思想已经远远超出了form元素的范畴，大量地在各种组件中运用。<a href="https://ant.design/docs/react/introduce-cn" target="_blank" rel="external">Ant.Design</a>存在有许多例子：</p>
+<ul>
+<li><a href="https://ant.design/components/pagination/" target="_blank" rel="external">Pagination</a>组件中有<code>current</code>与<code>defaultCurrent</code></li>
+<li><a href="https://ant.design/components/switch/" target="_blank" rel="external">Switch</a>组件中的<code>checked</code>与<code>defaultChecked</code></li>
+<li><a href="https://ant.design/components/slider/" target="_blank" rel="external">Slider</a>组件中的<code>value</code>与<code>defaultValue</code></li>
+</ul>
+<p><a href="https://github.com/mzabriskie/react-draggable" target="_blank" rel="external">react-draggable</a>中也根据此概念分为了<code>Draggable</code>和<code>DraggableCore</code>不同的两个组件。<br>回到Modal组件中，我们同样可以通过uncontrolled的思想解决问题，打开Modal通过外部调用，关闭则由Modal组件自身控制。</p>
+<h1 id="一个uncontrolled模式的Alert组件"><a href="#一个uncontrolled模式的Alert组件" class="headerlink" title="一个uncontrolled模式的Alert组件"></a>一个uncontrolled模式的Alert组件</h1><p>理论说了许多，以下我将以Alert组件为例，完成一个简洁的DEMO。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 用于渲染的中间函数，创建一个destroy传递给Alert组件</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">uncontrolledProtal</span> (<span class="params">config</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> $div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">  <span class="built_in">document</span>.body.appendChild($div)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">destroy</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">const</span> unmountResult = ReactDOM.unmountComponentAtNode($div)</div><div class="line">    <span class="keyword">if</span> (unmountResult &amp;&amp; $div.parentNode) &#123;</div><div class="line">      $div.parentNode.removeChild($div)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  ReactDOM.render(&lt;Alert destroy=&#123;destroy&#125; &#123;...config&#125; /&gt;, $div)</div><div class="line"></div><div class="line">  return &#123; destroy, config &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// Alert UI组件，将destroy绑定到需要触发的地方</div><div class="line">class Alert extends React.Component &#123;</div><div class="line">  static propTypes = &#123;</div><div class="line">    btnText: PropTypes.string,</div><div class="line">    destroy: PropTypes.func.isRequired,</div><div class="line">  &#125;</div><div class="line"></div><div class="line">   static defaultProps = &#123;</div><div class="line">    btnText: '确定',</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div className="modal-mask"&gt;</div><div class="line">        &lt;div className="modal-alert"&gt;</div><div class="line">          &#123;this.props.content&#125;</div><div class="line">          &lt;button</div><div class="line">            className="modal-alert-btn"</div><div class="line">            onClick=&#123;this.props.destroy&#125;</div><div class="line">          &gt;</div><div class="line">            &#123;this.props.btnText&#125;</div><div class="line">          &lt;/button&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 考虑到API语法的优雅，我们常常会把类似功能的组件统一export。例如：</div><div class="line"> *    https://ant.design/components/modal/</div><div class="line"> *    Modal.alert</div><div class="line"> *    Modal.confirm</div><div class="line"> *</div><div class="line"> *    https://ant.design/components/message/</div><div class="line"> *    message.success</div><div class="line"> *    message.error</div><div class="line"> *    message.info</div><div class="line"> */</div><div class="line"></div><div class="line">class Modal extends React.Component &#123;</div><div class="line">  // ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">Modal.alert = function (config) &#123;</div><div class="line">  return uncontrolledProtal(config)</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default Modal</div></pre></td></tr></table></figure></p>
+<p>以上我们完成了一个uncontrolled模式的Alert，现在调用起来就会很方便，不再需要定义state去控制show/hide了。<a href="https://www.vq0599.com/demos/#/modal_180805" target="_blank" rel="external">在线预览</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> Modal <span class="keyword">from</span> <span class="string">'Modal'</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  handleShowModal = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    Modal.alert(&#123;</div><div class="line">      content: &lt;p&gt;Some contents...&lt;/p&gt;</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;button onClick=&#123;<span class="keyword">this</span>.handleShowModal&#125;&gt;Open&lt;<span class="regexp">/button&gt;</span></div><div class="line"><span class="regexp">      &lt;/</span>div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="不同场景下的不同选择"><a href="#不同场景下的不同选择" class="headerlink" title="不同场景下的不同选择"></a>不同场景下的不同选择</h1><p>试图寻找一种完美的方式适应所有的场景，似乎并不是一条行得通的道路。<br>当存在外部数据与Modal组件内部数据绑定时，如果使用uncontrolled模式，可能会并不是一个正确的选择。<br>错误的例子：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  state = &#123;</div><div class="line">    value: <span class="string">'Some content'</span>,</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  handleSetValue = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">value</span>: <span class="string">'Hello World'</span>&#125;, () =&gt; &#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">'this value has change'</span>)</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  handleShowModal = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> content = (</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;p&gt;&#123;<span class="keyword">this</span>.state.value&#125;&lt;<span class="regexp">/p&gt;</span></div><div class="line"><span class="regexp">          &lt;a href="javascript:void(0)" onClick=&#123;this.handleSetValue&#125;&gt;click me&lt;/</span>a&gt;</div><div class="line">        &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">        &lt;br/</span>&gt;</div><div class="line">      &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">    )</span></div><div class="line"><span class="regexp"></span></div><div class="line"><span class="regexp">    Modal.alert(&#123; content &#125;)</span></div><div class="line"><span class="regexp">  &#125;</span></div><div class="line"><span class="regexp"></span></div><div class="line"><span class="regexp">  render() &#123;</span></div><div class="line"><span class="regexp">    return (</span></div><div class="line"><span class="regexp">      &lt;div&gt;</span></div><div class="line"><span class="regexp">        &lt;button onClick=&#123;this.handleShowModal&#125;&gt;Open&lt;/</span>button&gt;</div><div class="line">      &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">    )</span></div><div class="line"><span class="regexp">  &#125;</span></div><div class="line"><span class="regexp">&#125;</span></div></pre></td></tr></table></figure></p>
+<p>在以上的DEMO中，点击弹窗内的按钮“click me”，Alert中的内容会由“Some content”变成“Hello World”吗？<a href="https://www.vq0599.com/demos/#/modal_180805/error_usage" target="_blank" rel="external">在线预览</a><br>显然，外部组件的reRender是无法更新uncontrolled模式的组件~~~uncontrolled组件自身维护自身的状态，以此达到了简化代码的目的，当你希望控制组件状态时，你应该选择的是使用controlled组件，而不是在uncontrolled组件基础之上做一些奇技淫巧般的改造。</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>对于实际生产环境中，在需求/UI层面推动弹窗组件的规范，也是技术落地的重要保障。将<strong>高频的、静态的</strong>Modal抽象成uncontrolled组件，剩下一些<strong>复杂的、不可控的、存在数据通信的</strong>Modal脚踏实地地使用controlled组件完成。</p>
+<ul>
+<li><p>参考文献</p>
+<ul>
+<li><a href="https://ant.design/components/modal/" target="_blank" rel="external">https://ant.design/components/modal/</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/30271961" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/30271961</a></li>
+<li><a href="https://github.com/mzabriskie/react-draggable" target="_blank" rel="external">https://github.com/mzabriskie/react-draggable</a></li>
+</ul>
+</li>
+<li><p>文中涉及到的源码: <a href="https://github.com/HIceFire/demos/blob/master/src/views/Modal_180805" target="_blank" rel="external">https://github.com/HIceFire/demos</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/React/">React</a>
+            
+              <a href="/tags/Modal/">Modal</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/article/2018/0513.html">
+        <span class="next-text nav-default">论如何实现一个完美的Select组件</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+  </div>
+
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2017 - 
+    
+    2018
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">黄努努</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.6.0"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=2.6.0"></script>
+
+  </body>
+</html>
