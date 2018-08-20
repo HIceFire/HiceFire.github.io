@@ -244,7 +244,7 @@
 <li>父级容器<code>overflow: hidden</code>，Select组件位于较下方。</li>
 <li>父级容器的层级较低时，高层级元素与DropdownMenu位置重合。</li>
 </ol>
-<p>针对以上场景，分别做了一个简单的demo。<br><img src="//static.zcool.cn/zcool/build/common/select_error_all.gif" alt="导致错误的场景"><br><a href="http://www.vq0599.com/blog-demo/" target="_blank" rel="external">在线预览</a><br>鉴于以上场景都不属于小众场景，所以这个“BUG版”的Select组件显然是不合格。</p>
+<p>针对以上场景，分别做了一个简单的demo。<br><img src="//static.zcool.cn/zcool/build/common/select_error_all.gif" alt="导致错误的场景"><br><a href="https://www.vq0599.com/demos/#/select" target="_blank" rel="external">在线预览</a><br>鉴于以上场景都不属于小众场景，所以这个“BUG版”的Select组件显然是不合格。</p>
 <h1 id="第一直觉"><a href="#第一直觉" class="headerlink" title="第一直觉"></a>第一直觉</h1><p>其实如果经验相对丰富的小伙伴，面对这样的问题应该会条件反射到“render in body”这一概念。（啥是“render in body”呢？React项目中针对需要最高层级展示的组件，即可避开其他组件的影响，同时保留组件化写法的实现方式。最典型的为Modal组件，具体细节可参考我之前写的<a href="//www.vq0599.com/article/2017/1111.html">相关总结</a>）<br>但是Select组件的问题会比一般的“render in body”复杂许多，我们姑且以这种方式实现，把需要解决的问题总结为以下两点，并以此为目标探究<a href="https://github.com/ant-design/ant-design" target="_blank" rel="external">Ant Design</a>中相关组件源码。</p>
 <ol>
 <li>如何避免其他元素对DropdownMenu的影响？及对DropdownMenu其他元素的影响？(render in body)</li>
@@ -320,7 +320,7 @@
     
       <a class="prev" href="/article/2018/0805.html">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">React项目中Modal组件设计思想</span>
+        <span class="prev-text nav-default">React项目中Uncontrolled Component的运用</span>
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     

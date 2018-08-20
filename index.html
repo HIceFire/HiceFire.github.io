@@ -203,7 +203,7 @@
     <header class="post-header">
       <h1 class="post-title">
         
-          <a class="post-link" href="/article/2018/0805.html">React项目中Modal组件设计思想</a>
+          <a class="post-link" href="/article/2018/0805.html">React项目中Uncontrolled Component的运用</a>
         
       </h1>
 
@@ -215,7 +215,7 @@
         
         <div class="post-visits"
              data-url="/article/2018/0805.html"
-             data-title="React项目中Modal组件设计思想">
+             data-title="React项目中Uncontrolled Component的运用">
             阅读次数
           </div>
         
@@ -233,7 +233,11 @@
         
 
         
-          <p>早些时候，我阅读过一篇关于React Modal组件的文章<a href="https://zhuanlan.zhihu.com/p/30271961" target="_blank" rel="external">模态框秘密和“轮子”渐进设计</a>，收获颇丰，并用于实际生产环境。但在个人实践的过程中，该文的方法论虽然解决组件渲染与调用分离的问题，却依然存在一些使用痛点。本文将会介绍自己在生产环境中遇到的问题，并参考一些行业普遍解决问题的方式，做出总结。<br>
+          <p>uncontrolled是React中一个很重要概念，起源于（不知该概念是否更早于在其它领域出现过）React对一些form元素（input, textarea等）的封装，<a href="https://reactjs.org/docs/uncontrolled-components.html" target="_blank" rel="external">官方文档</a>给出一些描述：</p>
+<blockquote>
+<p>In most cases, we recommend using controlled components to implement forms. In a controlled component, form data is handled by a React component. The alternative is uncontrolled components, where form data is handled by the DOM itself.</p>
+</blockquote>
+<p>实际上，uncontrolled思想的运用已经远远超出了form元素的范畴，合理的使用uncontrolled component可以很大程度的简化代码，提高项目的可维护性。本文将结合几个常用的例子，总结个人在项目实践中对uncontrolled思想的运用。如有错误，欢迎指出。<br>
           <div class="read-more">
             <a href="/article/2018/0805.html" class="read-more-link">阅读更多</a>
           </div>
